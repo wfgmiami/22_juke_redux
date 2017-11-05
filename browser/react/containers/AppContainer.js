@@ -15,56 +15,47 @@ import { convertAlbum, convertAlbums, convertSong, skip } from '../utils';
 import store from '../store';
 import {toggle, toggleOne, load, startSong, play, pause, next, prev, setProgress} from '../action-creators/player';
 
+import fetchAlbums from '../action-creators/albums';
+import fetchArtists from '../action-creators/artists';
+import fetchPlaylists from '../action-creators/playlists';
+
 export default class AppContainer extends Component {
 
   constructor (props) {
     super(props);
-    this.state = Object.assign({}, initialState,store.getState())
+    this.state = Object.assign({}, initialState, store.getState())
 
-    this.toggle = this.toggle.bind(this);
-    this.toggleOne = this.toggleOne.bind(this);
-    this.next = this.next.bind(this);
-    this.prev = this.prev.bind(this);
+    // this.toggle = this.toggle.bind(this);
+    // this.toggleOne = this.toggleOne.bind(this);
+    // this.next = this.next.bind(this);
+    // this.prev = this.prev.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
     this.selectArtist = this.selectArtist.bind(this);
     this.addPlaylist = this.addPlaylist.bind(this);
     this.selectPlaylist = this.selectPlaylist.bind(this);
     this.loadSongs = this.loadSongs.bind(this);
     this.addSongToPlaylist = this.addSongToPlaylist.bind(this);
-    this.setProgress = this.setProgress.bind(this);
+    // this.setProgress = this.setProgress.bind(this);
   }
 
   componentDidMount () {
 
-    Promise
-      .all([
-        axios.get('/api/albums/'),
-        axios.get('/api/artists/'),
-        axios.get('/api/playlists')
-      ])
-      .then(res => res.map(r => r.data))
-      .then(data => this.onLoad(...data));
+    store.dispatch( fetchAlbums() );
+    store.dispatch( fetchArtists() );
+    store.dispatch( fetchPlaylists() );
 
     AUDIO.addEventListener('ended', () =>
       this.next());
     AUDIO.addEventListener('timeupdate', () =>
       this.setProgress(AUDIO.currentTime / AUDIO.duration));
 
-      this.unsubscribe = store.subscribe( ()=> {
-        this.setState(store.getState())
-      })
+    this.unsubscribe = store.subscribe( ()=> {
+      this.setState(store.getState())
+    })
   }
 
   componentWillUnmount(){
     this.unsubscribe();
-  }
-
-  onLoad (albums, artists, playlists) {
-    this.setState({
-      albums: convertAlbums(albums),
-      artists: artists,
-      playlists: playlists
-    });
   }
 
   play () {
@@ -84,12 +75,11 @@ export default class AppContainer extends Component {
   }
 
   toggleOne (selectedSong, selectedSongList) {
-      //console.log('in toggle',selectedSong)
+    // console.log('in toggle',selectedSong)
     store.dispatch(toggleOne(selectedSong, selectedSongList))
   }
 
   toggle () {
-
     store.dispatch(toggle());
   }
 

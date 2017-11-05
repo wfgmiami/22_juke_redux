@@ -8,13 +8,6 @@ class Player extends Component{
       progress: store.getState().player.progress
     }
   }
-  // const currentSong = props.currentSong;
-  // const currentSongList = props.currentSongList;
-  // const isPlaying = props.isPlaying;
-  // const progress = props.progress;
-  // const prev = props.prev;
-  // const toggle = props.toggle;
-  // const next = props.next;
 
   componentDidMount(){
     this.unsubscribe = store.subscribe(()=> this.setState( {progress: store.getState().player.progress }))
@@ -32,7 +25,7 @@ class Player extends Component{
     const toggle = this.props.toggle;
     const next = this.props.next;
     const progress = this.state.progress;
-console.log('IN PLAYER CURRENTSONG', currentSong)
+
     return (
       <footer>
         <div style={!currentSong.id ? {display: 'none'} : null}>
