@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 const Sidebar = (props) => {
 
   const playlists = !props.playlists.playlists ? props.playlists : props.playlists.playlists;
-
+  // console.log('sidebar props', props)
   return (
     <sidebar>
       <img src="juke.svg" className="logo" />

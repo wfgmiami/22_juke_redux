@@ -7,7 +7,8 @@ class FormContainer extends React.Component {
     super(props);
     this.state = {
       inputValue: '',
-      dirty: false
+      dirty: false,
+      warning: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,26 +27,34 @@ class FormContainer extends React.Component {
 
     const addPlaylist = this.props.addPlaylist;
     addPlaylist(this.state.inputValue);
-    this.setState({
-      inputValue: ''
-    });
-  }
-
-  render () {
 
     const dirty = this.state.dirty;
     const inputValue = this.state.inputValue;
-    let warning = '';
 
-    if (!inputValue && dirty) warning = 'You must enter a name';
-    else if (inputValue.length > 16) warning = 'Name must be less than 16 characters';
+    let warning;
+
+    if (!inputValue && dirty){
+      warning = 'You must enter a name';
+      this.setState({ warning });
+    } else if (inputValue.length > 16) {
+      warning = 'Name must be less than 16 characters';
+      this.setState({ warning });
+    }else{
+      warning = '';
+      this.setState({ warning });
+    }
+    this.setState({ inputValue: '' });
+
+  }
+
+  render () {
 
     return (
       <NewPlaylist
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
-        inputValue={inputValue}
-        warning={warning}
+        inputValue={this.state.inputValue}
+        warning={this.state.warning}
       />
     );
   }

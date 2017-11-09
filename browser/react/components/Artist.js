@@ -12,10 +12,12 @@ class Artist extends React.Component {
 
   render () {
 
-    const artist = this.props.selectedArtist;
+    const artist = this.props.selectedArtist.selectedArtist ? this.props.selectedArtist.selectedArtist : this.props.selectedArtist;
+
     const albums = artist.albums || [];
     const songs = artist.songs || [];
     const children = this.props.children;
+    // console.log('this props artist', artist, artist.albums, artist.songs)
 
     return (
       <div>
@@ -24,11 +26,15 @@ class Artist extends React.Component {
           <li><Link to={`/artists/${artist.id}/albums`}>ALBUMS</Link></li>
           <li><Link to={`/artists/${artist.id}/songs`}>SONGS</Link></li>
         </ul>
+
         {
-          children && React.cloneElement(children, Object.assign({}, this.props, {
-            albums: albums,
-            songs: songs
-          }))
+          children && React.cloneElement(children, Object.assign({},
+          this.props,
+            {/* {
+              albums: albums,
+              songs: songs
+            } */}
+          ))
         }
       </div>
     );

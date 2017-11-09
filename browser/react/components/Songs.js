@@ -2,25 +2,20 @@ import React, { Component } from 'react';
 import store from '../store';
 
 class Songs extends Component{
-  constructor(props){
-    super();
-    this.state = { isPlaying: store.getState().player.isPlaying }
-  }
 
-  componentDidMount(){
-    this.unsubscribe = store.subscribe(()=> this.setState({ isPlaying: store.getState().player.isPlaying }))
-  }
-
-  componentWillUnmount(){
-    this.unsubscribe();
-  }
 
   render(){
-    const songs = this.props.songs;
-    const currentSong = this.props.currentSong;
-    const isPlaying = this.props.isPlaying;
+
+    // console.log('....songs this.props ', this.props)
+    const currentSong = this.props.player.currentSong;
+    const isPlaying = this.props.player.isPlaying;
     const toggle = this.props.toggleOne;
-    //console.log('songs, store.isPlaing', isPlaying);
+
+    const playlist = this.props.selectedPlaylist.selectedPlaylist ?
+    this.props.selectedPlaylist.selectedPlaylist : '';
+
+    const songs = ( this.props.selectedArtist.selectedArtist && !playlist ) ? this.props.selectedArtist.selectedArtist.songs :  ( !this.props.selectedArtist.selectedArtist && playlist ) ? this.props.selectedPlaylist.selectedPlaylist.songs : this.props.songs;;
+
     return (
       <table className='table'>
         <thead>

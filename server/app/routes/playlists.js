@@ -65,6 +65,7 @@ router.post('/:playlistId/songs', function (req, res, next) {
 });
 
 router.get('/:playlistId/songs/:songId', function (req, res) {
+
   const requestedSong = req.playlist.songs.find(function (song) {
     return song.id === Number(req.params.songId);
   });

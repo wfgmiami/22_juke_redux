@@ -23,18 +23,26 @@ class AddSongContainer extends React.Component {
       songId: evt.target.value,
       error: false
     });
+
   }
 
   handleSubmit (evt) {
     evt.preventDefault();
 
-    const playlistId = this.props.selectedPlaylist.id;
-    const songId = this.state.songId;
+    const playlistId = this.props.selectedPlaylist.selectedPlaylist ? this.props.selectedPlaylist.selectedPlaylist.id : this.props.selectedPlaylist.id;
 
+    const songId = this.state.songId;
     this.props.addSongToPlaylist(playlistId, songId)
-      .catch(err => {
+
+    if( !this.props.selectedPlaylist ){
+      if( this.props.selectedPlaylist.errorSelectedPlaylist ){
         this.setState({ error: true });
-      });
+      }
+    }
+    // tryAdding()
+    //   .catch(err => {
+    //     this.setState({ error: true });
+    //   });
   }
 
   render () {

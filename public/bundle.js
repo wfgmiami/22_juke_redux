@@ -68,11 +68,11 @@
 	
 	var _Album2 = _interopRequireDefault(_Album);
 	
-	var _FilterableArtistsContainer = __webpack_require__(306);
+	var _FilterableArtistsContainer = __webpack_require__(310);
 	
 	var _FilterableArtistsContainer2 = _interopRequireDefault(_FilterableArtistsContainer);
 	
-	var _Artist = __webpack_require__(309);
+	var _Artist = __webpack_require__(313);
 	
 	var _Artist2 = _interopRequireDefault(_Artist);
 	
@@ -80,26 +80,46 @@
 	
 	var _Songs2 = _interopRequireDefault(_Songs);
 	
-	var _NewPlaylistContainer = __webpack_require__(310);
+	var _NewPlaylistContainer = __webpack_require__(314);
 	
 	var _NewPlaylistContainer2 = _interopRequireDefault(_NewPlaylistContainer);
 	
-	var _Playlist = __webpack_require__(312);
+	var _Playlist = __webpack_require__(316);
 	
 	var _Playlist2 = _interopRequireDefault(_Playlist);
 	
-	var _LyricsContainer = __webpack_require__(315);
+	var _LyricsContainer = __webpack_require__(319);
 	
 	var _LyricsContainer2 = _interopRequireDefault(_LyricsContainer);
 	
+	var _store = __webpack_require__(264);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	var _albums = __webpack_require__(322);
+	
+	var _albums2 = _interopRequireDefault(_albums);
+	
+	var _artists = __webpack_require__(323);
+	
+	var _artists2 = _interopRequireDefault(_artists);
+	
+	var _playlists = __webpack_require__(309);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var init = function init() {
+	  _store2.default.dispatch((0, _albums2.default)());
+	  _store2.default.dispatch((0, _artists2.default)());
+	  _store2.default.dispatch((0, _playlists.fetchPlaylists)());
+	};
 	
 	_reactDom2.default.render(_react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.hashHistory },
 	  _react2.default.createElement(
 	    _reactRouter.Route,
-	    { path: '/', component: _AppContainer2.default, foo: 'foo' },
+	    { path: '/', component: _AppContainer2.default, foo: 'foo', onEnter: init },
 	    _react2.default.createElement(_reactRouter.Route, { path: '/albums', component: _Albums2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/albums/:albumId', component: _Album2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/artists', component: _FilterableArtistsContainer2.default }),
@@ -26615,37 +26635,35 @@
 	
 	var _Album2 = _interopRequireDefault(_Album);
 	
-	var _Sidebar = __webpack_require__(299);
+	var _Sidebar = __webpack_require__(302);
 	
 	var _Sidebar2 = _interopRequireDefault(_Sidebar);
 	
-	var _Player = __webpack_require__(300);
+	var _Player = __webpack_require__(303);
 	
 	var _Player2 = _interopRequireDefault(_Player);
 	
-	var _utils = __webpack_require__(301);
+	var _utils = __webpack_require__(304);
 	
 	var _store = __webpack_require__(264);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _player = __webpack_require__(302);
+	var _player = __webpack_require__(305);
 	
-	var _albums = __webpack_require__(303);
+	var _album = __webpack_require__(306);
 	
-	var _albums2 = _interopRequireDefault(_albums);
+	var _album2 = _interopRequireDefault(_album);
 	
-	var _artists = __webpack_require__(304);
+	var _artist = __webpack_require__(307);
 	
-	var _artists2 = _interopRequireDefault(_artists);
+	var _artist2 = _interopRequireDefault(_artist);
 	
-	var _playlists = __webpack_require__(305);
+	var _selectedPlaylist = __webpack_require__(308);
 	
-	var _playlists2 = _interopRequireDefault(_playlists);
+	var _playlists = __webpack_require__(309);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -26667,13 +26685,14 @@
 	    // this.toggleOne = this.toggleOne.bind(this);
 	    // this.next = this.next.bind(this);
 	    // this.prev = this.prev.bind(this);
-	    _this.selectAlbum = _this.selectAlbum.bind(_this);
-	    _this.selectArtist = _this.selectArtist.bind(_this);
-	    _this.addPlaylist = _this.addPlaylist.bind(_this);
-	    _this.selectPlaylist = _this.selectPlaylist.bind(_this);
-	    _this.loadSongs = _this.loadSongs.bind(_this);
-	    _this.addSongToPlaylist = _this.addSongToPlaylist.bind(_this);
+	    // this.selectAlbum = this.selectAlbum.bind(this);
+	    // this.selectArtist = this.selectArtist.bind(this);
 	    // this.setProgress = this.setProgress.bind(this);
+	    // this.selectPlaylist = this.selectPlaylist.bind(this);
+	    // this.addPlaylist = this.addPlaylist.bind(this);
+	    _this.loadSongs = _this.loadSongs.bind(_this);
+	    // this.addSongToPlaylist = this.addSongToPlaylist.bind(this);
+	
 	    return _this;
 	  }
 	
@@ -26681,10 +26700,6 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var _this2 = this;
-	
-	      _store2.default.dispatch((0, _albums2.default)());
-	      _store2.default.dispatch((0, _artists2.default)());
-	      _store2.default.dispatch((0, _playlists2.default)());
 	
 	      _audio2.default.addEventListener('ended', function () {
 	        return _this2.next();
@@ -26751,75 +26766,41 @@
 	  }, {
 	    key: 'selectAlbum',
 	    value: function selectAlbum(albumId) {
-	      var _this3 = this;
-	
-	      _axios2.default.get('/api/albums/' + albumId).then(function (res) {
-	        return res.data;
-	      }).then(function (album) {
-	        _this3.setState({ selectedAlbum: (0, _utils.convertAlbum)(album) });
-	      });
+	      _store2.default.dispatch((0, _album2.default)(albumId));
 	    }
 	  }, {
 	    key: 'selectArtist',
 	    value: function selectArtist(artistId) {
-	      var _this4 = this;
-	
-	      Promise.all([_axios2.default.get('/api/artists/' + artistId), _axios2.default.get('/api/artists/' + artistId + '/albums'), _axios2.default.get('/api/artists/' + artistId + '/songs')]).then(function (res) {
-	        return res.map(function (r) {
-	          return r.data;
-	        });
-	      }).then(function (data) {
-	        return _this4.onLoadArtist.apply(_this4, _toConsumableArray(data));
-	      });
-	    }
-	  }, {
-	    key: 'onLoadArtist',
-	    value: function onLoadArtist(artist, albums, songs) {
-	      songs = songs.map(_utils.convertSong);
-	      albums = (0, _utils.convertAlbums)(albums);
-	      artist.albums = albums;
-	      artist.songs = songs;
-	
-	      this.setState({ selectedArtist: artist });
+	      _store2.default.dispatch((0, _artist2.default)(artistId));
 	    }
 	  }, {
 	    key: 'addPlaylist',
 	    value: function addPlaylist(playlistName) {
-	      var _this5 = this;
-	
-	      _axios2.default.post('/api/playlists', { name: playlistName }).then(function (res) {
-	        return res.data;
-	      }).then(function (playlist) {
-	        _this5.setState({
-	          playlists: [].concat(_toConsumableArray(_this5.state.playlists), [playlist])
-	        }, function () {
-	          _reactRouter.hashHistory.push('/playlists/' + playlist.id);
-	        });
-	      });
+	      _store2.default.dispatch((0, _playlists.postPlaylists)(playlistName));
+	      // axios.post('/api/playlists', { name: playlistName })
+	      //   .then(res => res.data)
+	      //   .then(playlist => {
+	      //     this.setState({
+	      //       playlists: [...this.state.playlists, playlist]
+	      //     }, () => {
+	      //       hashHistory.push(`/playlists/${playlist.id}`)
+	      //     });
+	      //   });
 	    }
 	  }, {
 	    key: 'selectPlaylist',
 	    value: function selectPlaylist(playlistId) {
-	      var _this6 = this;
-	
-	      _axios2.default.get('/api/playlists/' + playlistId).then(function (res) {
-	        return res.data;
-	      }).then(function (playlist) {
-	        playlist.songs = playlist.songs.map(_utils.convertSong);
-	        _this6.setState({
-	          selectedPlaylist: playlist
-	        });
-	      });
+	      _store2.default.dispatch((0, _selectedPlaylist.fetchSelectedPlaylist)(playlistId));
 	    }
 	  }, {
 	    key: 'loadSongs',
 	    value: function loadSongs(songs) {
-	      var _this7 = this;
+	      var _this3 = this;
 	
 	      _axios2.default.get('/api/songs').then(function (res) {
 	        return res.data;
 	      }).then(function (songs) {
-	        _this7.setState({
+	        _this3.setState({
 	          songs: songs
 	        });
 	      });
@@ -26827,24 +26808,25 @@
 	  }, {
 	    key: 'addSongToPlaylist',
 	    value: function addSongToPlaylist(playlistId, songId) {
-	      var _this8 = this;
 	
-	      return _axios2.default.post('/api/playlists/' + playlistId + '/songs', {
-	        id: songId
-	      }).then(function (res) {
-	        return res.data;
-	      }).then(function (song) {
-	        var selectedPlaylist = _this8.state.selectedPlaylist;
-	        var songs = _this8.state.selectedPlaylist.songs;
-	        var newSongs = [].concat(_toConsumableArray(songs), [(0, _utils.convertSong)(song)]);
-	        var newSelectedPlaylist = Object.assign({}, selectedPlaylist, {
-	          songs: newSongs
-	        });
+	      _store2.default.dispatch((0, _selectedPlaylist.postSongToPlaylist)(playlistId, songId));
 	
-	        _this8.setState({
-	          selectedPlaylist: newSelectedPlaylist
-	        });
-	      });
+	      // return axios.post(`/api/playlists/${playlistId}/songs`, {
+	      //   id: songId
+	      // })
+	      //   .then(res => res.data)
+	      //   .then(song => {
+	      //     const selectedPlaylist = this.state.selectedPlaylist;
+	      //     const songs = this.state.selectedPlaylist.songs;
+	      //     const newSongs = [...songs, convertSong(song)];
+	      //     const newSelectedPlaylist = Object.assign({}, selectedPlaylist, {
+	      //       songs: newSongs
+	      //     });
+	
+	      //     this.setState({
+	      //       selectedPlaylist: newSelectedPlaylist
+	      //     });
+	      //   });
 	    }
 	  }, {
 	    key: 'render',
@@ -28390,9 +28372,6 @@
 	  value: true
 	});
 	var initialState = {
-	  selectedAlbum: {},
-	  selectedArtist: {},
-	  selectedPlaylist: {},
 	  songs: []
 	};
 	
@@ -28429,9 +28408,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Albums = function Albums(props) {
+	  // console.log('this props albums',props)
+	  // const albums = props.albums.albums;
 	
-	  var albums = props.albums.albums;
-	  var selectAlbum = props.selectAlbum;
+	  var albums = props.selectedArtist.selectedArtist ? props.selectedArtist.selectedArtist.albums : props.albums.albums;
+	  // console.log('.....Albums props: ', props)
 	  return _react2.default.createElement(
 	    'div',
 	    null,
@@ -28527,11 +28508,13 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var album = this.props.selectedAlbum;
+	      var album = this.props.selectedAlbum.selectedAlbum ? this.props.selectedAlbum.selectedAlbum : this.props.selectedAlbum;
+	
 	      var currentSong = this.props.player.currentSong;
 	      var isPlaying = this.props.player.isPlaying;
 	      var toggleOne = this.props.toggleOne;
 	
+	      // console.log('....this.props, album', this.props)
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'album' },
@@ -28546,6 +28529,9 @@
 	          _react2.default.createElement('img', { src: album.imageUrl, className: 'img-thumbnail' })
 	        ),
 	        _react2.default.createElement(_Songs2.default, {
+	          selectedArtist: this.props.selectedArtist,
+	          selectedPlaylist: this.props.selectedPlaylist,
+	          player: this.props.player,
 	          songs: album.songs,
 	          currentSong: currentSong,
 	          isPlaying: isPlaying,
@@ -28590,37 +28576,25 @@
 	var Songs = function (_Component) {
 	  _inherits(Songs, _Component);
 	
-	  function Songs(props) {
+	  function Songs() {
 	    _classCallCheck(this, Songs);
 	
-	    var _this = _possibleConstructorReturn(this, (Songs.__proto__ || Object.getPrototypeOf(Songs)).call(this));
-	
-	    _this.state = { isPlaying: _store2.default.getState().player.isPlaying };
-	    return _this;
+	    return _possibleConstructorReturn(this, (Songs.__proto__ || Object.getPrototypeOf(Songs)).apply(this, arguments));
 	  }
 	
 	  _createClass(Songs, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this2 = this;
-	
-	      this.unsubscribe = _store2.default.subscribe(function () {
-	        return _this2.setState({ isPlaying: _store2.default.getState().player.isPlaying });
-	      });
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.unsubscribe();
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var songs = this.props.songs;
-	      var currentSong = this.props.currentSong;
-	      var isPlaying = this.props.isPlaying;
+	
+	      // console.log('....songs this.props ', this.props)
+	      var currentSong = this.props.player.currentSong;
+	      var isPlaying = this.props.player.isPlaying;
 	      var toggle = this.props.toggleOne;
-	      //console.log('songs, store.isPlaing', isPlaying);
+	
+	      var playlist = this.props.selectedPlaylist.selectedPlaylist ? this.props.selectedPlaylist.selectedPlaylist : '';
+	
+	      var songs = this.props.selectedArtist.selectedArtist && !playlist ? this.props.selectedArtist.selectedArtist.songs : !this.props.selectedArtist.selectedArtist && playlist ? this.props.selectedPlaylist.selectedPlaylist.songs : this.props.songs;;
+	
 	      return _react2.default.createElement(
 	        'table',
 	        { className: 'table' },
@@ -28731,19 +28705,29 @@
 	
 	var _playlistsReducer2 = _interopRequireDefault(_playlistsReducer);
 	
-	var _albumReducer = __webpack_require__(318);
+	var _albumReducer = __webpack_require__(292);
 	
 	var _albumReducer2 = _interopRequireDefault(_albumReducer);
 	
-	var _reduxLogger = __webpack_require__(292);
+	var _artistReducer = __webpack_require__(293);
+	
+	var _artistReducer2 = _interopRequireDefault(_artistReducer);
+	
+	var _selectedPlaylistReducer = __webpack_require__(294);
+	
+	var _selectedPlaylistReducer2 = _interopRequireDefault(_selectedPlaylistReducer);
+	
+	var _reduxLogger = __webpack_require__(295);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
-	var _reduxThunk = __webpack_require__(298);
+	var _reduxThunk = __webpack_require__(301);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// import addToPlaylistReducer from './reducers/addToPlaylist-reducer.js';
 	
 	var combinedReducers = (0, _redux.combineReducers)({
 	  lyrics: _lyricsReducer2.default,
@@ -28751,7 +28735,10 @@
 	  albums: _albumsReducer2.default,
 	  artists: _artistsReducer2.default,
 	  playlists: _playlistsReducer2.default,
-	  album: _albumReducer2.default
+	  selectedAlbum: _albumReducer2.default,
+	  selectedArtist: _artistReducer2.default,
+	  selectedPlaylist: _selectedPlaylistReducer2.default
+	  // addToPlaylist: addToPlaylistReducer
 	});
 	
 	// const store = createStore(combinedReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), applyMiddleware(loggerMiddleware, thunkMiddleware));
@@ -29845,6 +29832,9 @@
 	// Playlists
 	var RECEIVE_PLAYLISTS = exports.RECEIVE_PLAYLISTS = 'RECEIVE_PLAYLISTS';
 	var RECEIVE_PLAYLIST = exports.RECEIVE_PLAYLIST = 'RECEIVE_PLAYLIST';
+	var ERROR_RECEIVE_PLAYLIST = exports.ERROR_RECEIVE_PLAYLIST = 'ERROR_RECEIVE_PLAYLIST';
+	var ADD_TO_PLAYLIST = exports.ADD_TO_PLAYLIST = 'ADD_TO_PLAYLIST';
+	var ADD_SONG_TO_PLAYLIST = exports.ADD_SONG_TO_PLAYLIST = 'ADD_SONG_TO_PLAYLIST';
 	
 	// Songs
 	var RECEIVE_SONGS = exports.RECEIVE_SONGS = 'RECEIVE_SONGS';
@@ -29994,15 +29984,93 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	
+	var _constants = __webpack_require__(287);
+	
+	exports.default = function () {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var action = arguments[1];
+	
+	
+	  switch (action.type) {
+	    case _constants.RECEIVE_ALBUM:
+	      return Object.assign({}, state, { selectedAlbum: action.album });
+	    default:
+	      return state;
+	  }
+	};
+
+/***/ },
+/* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _constants = __webpack_require__(287);
+	
+	exports.default = function () {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var action = arguments[1];
+	
+	
+	  switch (action.type) {
+	    case _constants.RECEIVE_ARTIST:
+	      return Object.assign({}, state, { selectedArtist: action.artist });
+	    default:
+	      return state;
+	  }
+	};
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _constants = __webpack_require__(287);
+	
+	exports.default = function () {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var action = arguments[1];
+	
+	
+	  switch (action.type) {
+	
+	    case _constants.RECEIVE_PLAYLIST:
+	      return Object.assign({}, state, { selectedPlaylist: action.playlist });
+	    case _constants.ERROR_RECEIVE_PLAYLIST:
+	      return Object.assign({}, state, { errorSelectedPlaylist: action.error });
+	    default:
+	      return state;
+	  }
+	};
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	exports.logger = exports.createLogger = exports.defaults = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _core = __webpack_require__(293);
+	var _core = __webpack_require__(296);
 	
-	var _helpers = __webpack_require__(294);
+	var _helpers = __webpack_require__(297);
 	
-	var _defaults = __webpack_require__(297);
+	var _defaults = __webpack_require__(300);
 	
 	var _defaults2 = _interopRequireDefault(_defaults);
 	
@@ -30130,7 +30198,7 @@
 	exports.default = defaultLogger;
 
 /***/ },
-/* 293 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30143,9 +30211,9 @@
 	
 	exports.printBuffer = printBuffer;
 	
-	var _helpers = __webpack_require__(294);
+	var _helpers = __webpack_require__(297);
 	
-	var _diff = __webpack_require__(295);
+	var _diff = __webpack_require__(298);
 	
 	var _diff2 = _interopRequireDefault(_diff);
 	
@@ -30278,7 +30346,7 @@
 	}
 
 /***/ },
-/* 294 */
+/* 297 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30302,7 +30370,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 295 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30312,7 +30380,7 @@
 	});
 	exports.default = diffLogger;
 	
-	var _deepDiff = __webpack_require__(296);
+	var _deepDiff = __webpack_require__(299);
 	
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 	
@@ -30401,7 +30469,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 296 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -30830,7 +30898,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 297 */
+/* 300 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30881,7 +30949,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 298 */
+/* 301 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30909,7 +30977,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 299 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30929,7 +30997,7 @@
 	var Sidebar = function Sidebar(props) {
 	
 	  var playlists = !props.playlists.playlists ? props.playlists : props.playlists.playlists;
-	
+	  // console.log('sidebar props', props)
 	  return _react2.default.createElement(
 	    'sidebar',
 	    null,
@@ -31007,7 +31075,7 @@
 	exports.default = Sidebar;
 
 /***/ },
-/* 300 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31118,7 +31186,7 @@
 	exports.default = Player;
 
 /***/ },
-/* 301 */
+/* 304 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -31160,7 +31228,7 @@
 	};
 
 /***/ },
-/* 302 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31172,7 +31240,7 @@
 	
 	var _constants = __webpack_require__(287);
 	
-	var _utils = __webpack_require__(301);
+	var _utils = __webpack_require__(304);
 	
 	var _audio = __webpack_require__(260);
 	
@@ -31288,50 +31356,7 @@
 	};
 
 /***/ },
-/* 303 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _constants = __webpack_require__(287);
-	
-	var _utils = __webpack_require__(301);
-	
-	var _axios = __webpack_require__(234);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var setAlbums = function setAlbums(albums) {
-	
-	  return {
-	    type: _constants.RECEIVE_ALBUMS,
-	    albums: albums
-	  };
-	};
-	
-	var fetchAlbums = function fetchAlbums() {
-	
-	  return function (dispatch, getState) {
-	    _axios2.default.get('/api/albums/').then(function (response) {
-	      return response.data;
-	    }).then(function (albums) {
-	      return (0, _utils.convertAlbums)(albums);
-	    }).then(function (convertedAlbums) {
-	      dispatch(setAlbums(convertedAlbums));
-	    });
-	  };
-	};
-	
-	exports.default = fetchAlbums;
-
-/***/ },
-/* 304 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31346,30 +31371,32 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _utils = __webpack_require__(304);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var setArtists = function setArtists(artists) {
+	var setAlbum = function setAlbum(album) {
 	  return {
-	    type: _constants.RECEIVE_ARTISTS,
-	    artists: artists
+	    type: _constants.RECEIVE_ALBUM,
+	    album: album
 	  };
 	};
 	
-	var fetchArtists = function fetchArtists() {
+	var fetchAlbum = function fetchAlbum(albumId) {
 	  return function (dispatch) {
-	    _axios2.default.get('/api/artists/').then(function (response) {
-	      return response.data;
-	    }).then(function (artists) {
+	    _axios2.default.get('/api/albums/' + albumId).then(function (res) {
+	      return res.data;
+	    }).then(function (album) {
 	
-	      dispatch(setArtists(artists));
+	      dispatch(setAlbum((0, _utils.convertAlbum)(album)));
 	    });
 	  };
 	};
 	
-	exports.default = fetchArtists;
+	exports.default = fetchAlbum;
 
 /***/ },
-/* 305 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31378,13 +31405,140 @@
 	  value: true
 	});
 	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
 	var _constants = __webpack_require__(287);
 	
 	var _axios = __webpack_require__(234);
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _utils = __webpack_require__(304);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var setArtist = function setArtist(artist) {
+	  return {
+	    type: _constants.RECEIVE_ARTIST,
+	    artist: artist
+	  };
+	};
+	
+	var fetchArtist = function fetchArtist(artistId) {
+	  return function (dispatch) {
+	
+	    Promise.all([_axios2.default.get('/api/artists/' + artistId), _axios2.default.get('/api/artists/' + artistId + '/albums'), _axios2.default.get('/api/artists/' + artistId + '/songs')]).then(function (res) {
+	      return res.map(function (r) {
+	        return r.data;
+	      });
+	    }).then(function (data) {
+	      var _data = _slicedToArray(data, 3),
+	          artist = _data[0],
+	          albums = _data[1],
+	          songs = _data[2];
+	
+	      songs = songs.map(_utils.convertSong);
+	      albums = (0, _utils.convertAlbums)(albums);
+	      artist.albums = albums;
+	      artist.songs = songs;
+	      dispatch(setArtist(artist));
+	    });
+	  };
+	};
+	
+	exports.default = fetchArtist;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.postSongToPlaylist = exports.fetchSelectedPlaylist = undefined;
+	
+	var _constants = __webpack_require__(287);
+	
+	var _axios = __webpack_require__(234);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _utils = __webpack_require__(304);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	var setSelectedPlaylist = function setSelectedPlaylist(playlist) {
+	  return {
+	    type: _constants.RECEIVE_PLAYLIST,
+	    playlist: playlist
+	  };
+	};
+	
+	var setSelectedPlaylistError = function setSelectedPlaylistError(error) {
+	  return {
+	    type: _constants.ERROR_RECEIVE_PLAYLIST,
+	    error: error
+	  };
+	};
+	
+	var fetchSelectedPlaylist = function fetchSelectedPlaylist(playlistId) {
+	  return function (dispatch) {
+	    _axios2.default.get('/api/playlists/' + playlistId).then(function (res) {
+	      return res.data;
+	    }).then(function (playlist) {
+	      playlist.songs = playlist.songs.map(_utils.convertSong);
+	      dispatch(setSelectedPlaylist(playlist));
+	    });
+	  };
+	};
+	
+	var postSongToPlaylist = function postSongToPlaylist(playlistId, songId) {
+	  return function (dispatch, getState) {
+	    var err = '';
+	
+	    _axios2.default.post('/api/playlists/' + playlistId + '/songs', { id: songId }).then(function (res) {
+	      return res.data;
+	    }).then(function (song) {
+	      var playlist = getState().selectedPlaylist.selectedPlaylist;
+	      var songs = playlist.songs;
+	      var newSongs = [].concat(_toConsumableArray(songs), [(0, _utils.convertSong)(song)]);
+	      playlist.songs = newSongs;
+	      dispatch(setSelectedPlaylist(playlist));
+	    }).catch(function (error) {
+	      dispatch(setSelectedPlaylist(error));
+	    });
+	  };
+	};
+	
+	exports.fetchSelectedPlaylist = fetchSelectedPlaylist;
+	exports.postSongToPlaylist = postSongToPlaylist;
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.postPlaylists = exports.fetchPlaylists = undefined;
+	
+	var _constants = __webpack_require__(287);
+	
+	var _axios = __webpack_require__(234);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _utils = __webpack_require__(304);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	var setPlaylists = function setPlaylists(playlists) {
 	  return {
@@ -31398,16 +31552,28 @@
 	    _axios2.default.get('/api/playlists').then(function (response) {
 	      return response.data;
 	    }).then(function (playlists) {
-	
 	      dispatch(setPlaylists(playlists));
 	    });
 	  };
 	};
 	
-	exports.default = fetchPlaylists;
+	var postPlaylists = function postPlaylists(playlistName) {
+	  return function (dispatch, getState) {
+	    _axios2.default.post('/api/playlists', { name: playlistName }).then(function (res) {
+	      return res.data;
+	    }).then(function (playlist) {
+	      var playlists = getState().playlists.playlists;
+	      playlists = [].concat(_toConsumableArray(playlists), [playlist]);
+	      dispatch(setPlaylists(playlists));
+	    });
+	  };
+	};
+	
+	exports.fetchPlaylists = fetchPlaylists;
+	exports.postPlaylists = postPlaylists;
 
 /***/ },
-/* 306 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31422,11 +31588,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _FilterInput = __webpack_require__(307);
+	var _FilterInput = __webpack_require__(311);
 	
 	var _FilterInput2 = _interopRequireDefault(_FilterInput);
 	
-	var _Artists = __webpack_require__(308);
+	var _Artists = __webpack_require__(312);
 	
 	var _Artists2 = _interopRequireDefault(_Artists);
 	
@@ -31489,7 +31655,7 @@
 	exports.default = FilterableArtistsContainer;
 
 /***/ },
-/* 307 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31524,7 +31690,7 @@
 	exports.default = FilterInput;
 
 /***/ },
-/* 308 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31542,7 +31708,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Artists = function Artists(props) {
-	
 	  var artists = props.artists;
 	
 	  return _react2.default.createElement(
@@ -31574,7 +31739,7 @@
 	exports.default = Artists;
 
 /***/ },
-/* 309 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31620,10 +31785,12 @@
 	    key: 'render',
 	    value: function render() {
 	
-	      var artist = this.props.selectedArtist;
+	      var artist = this.props.selectedArtist.selectedArtist ? this.props.selectedArtist.selectedArtist : this.props.selectedArtist;
+	
 	      var albums = artist.albums || [];
 	      var songs = artist.songs || [];
 	      var children = this.props.children;
+	      // console.log('this props artist', artist, artist.albums, artist.songs)
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -31655,10 +31822,10 @@
 	            )
 	          )
 	        ),
-	        children && _react2.default.cloneElement(children, Object.assign({}, this.props, {
-	          albums: albums,
-	          songs: songs
-	        }))
+	        children && _react2.default.cloneElement(children, Object.assign({}, this.props, {/* {
+	                                                                                           albums: albums,
+	                                                                                           songs: songs
+	                                                                                          } */}))
 	      );
 	    }
 	  }]);
@@ -31669,7 +31836,7 @@
 	exports.default = Artist;
 
 /***/ },
-/* 310 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31684,7 +31851,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _NewPlaylist = __webpack_require__(311);
+	var _NewPlaylist = __webpack_require__(315);
 	
 	var _NewPlaylist2 = _interopRequireDefault(_NewPlaylist);
 	
@@ -31706,7 +31873,8 @@
 	
 	    _this.state = {
 	      inputValue: '',
-	      dirty: false
+	      dirty: false,
+	      warning: ''
 	    };
 	    _this.handleChange = _this.handleChange.bind(_this);
 	    _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -31729,25 +31897,33 @@
 	
 	      var addPlaylist = this.props.addPlaylist;
 	      addPlaylist(this.state.inputValue);
-	      this.setState({
-	        inputValue: ''
-	      });
+	
+	      var dirty = this.state.dirty;
+	      var inputValue = this.state.inputValue;
+	
+	      var warning = void 0;
+	
+	      if (!inputValue && dirty) {
+	        warning = 'You must enter a name';
+	        this.setState({ warning: warning });
+	      } else if (inputValue.length > 16) {
+	        warning = 'Name must be less than 16 characters';
+	        this.setState({ warning: warning });
+	      } else {
+	        warning = '';
+	        this.setState({ warning: warning });
+	      }
+	      this.setState({ inputValue: '' });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	
-	      var dirty = this.state.dirty;
-	      var inputValue = this.state.inputValue;
-	      var warning = '';
-	
-	      if (!inputValue && dirty) warning = 'You must enter a name';else if (inputValue.length > 16) warning = 'Name must be less than 16 characters';
-	
 	      return _react2.default.createElement(_NewPlaylist2.default, {
 	        handleChange: this.handleChange,
 	        handleSubmit: this.handleSubmit,
-	        inputValue: inputValue,
-	        warning: warning
+	        inputValue: this.state.inputValue,
+	        warning: this.state.warning
 	      });
 	    }
 	  }]);
@@ -31758,7 +31934,7 @@
 	exports.default = FormContainer;
 
 /***/ },
-/* 311 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31842,7 +32018,7 @@
 	exports.default = NewPlaylist;
 
 /***/ },
-/* 312 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31863,7 +32039,7 @@
 	
 	var _Songs2 = _interopRequireDefault(_Songs);
 	
-	var _AddSongContainer = __webpack_require__(313);
+	var _AddSongContainer = __webpack_require__(317);
 	
 	var _AddSongContainer2 = _interopRequireDefault(_AddSongContainer);
 	
@@ -31897,13 +32073,14 @@
 	      var nextPlaylistId = nextProps.routeParams.playlistId;
 	      var currentPlaylistId = this.props.routeParams.playlistId;
 	      var selectPlaylist = this.props.selectPlaylist;
+	
 	      if (nextPlaylistId !== currentPlaylistId) selectPlaylist(nextPlaylistId);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	
-	      var playlist = this.props.selectedPlaylist;
+	      //  console.log('....playlist props', this.props)
+	      var playlist = this.props.selectedPlaylist.selectedPlaylist ? this.props.selectedPlaylist.selectedPlaylist : this.props.selectedPlaylist;
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -31931,7 +32108,7 @@
 	exports.default = Playlist;
 
 /***/ },
-/* 313 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31952,7 +32129,7 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
-	var _AddSong = __webpack_require__(314);
+	var _AddSong = __webpack_require__(318);
 	
 	var _AddSong2 = _interopRequireDefault(_AddSong);
 	
@@ -31997,16 +32174,22 @@
 	  }, {
 	    key: 'handleSubmit',
 	    value: function handleSubmit(evt) {
-	      var _this2 = this;
-	
 	      evt.preventDefault();
 	
-	      var playlistId = this.props.selectedPlaylist.id;
-	      var songId = this.state.songId;
+	      var playlistId = this.props.selectedPlaylist.selectedPlaylist ? this.props.selectedPlaylist.selectedPlaylist.id : this.props.selectedPlaylist.id;
 	
-	      this.props.addSongToPlaylist(playlistId, songId).catch(function (err) {
-	        _this2.setState({ error: true });
-	      });
+	      var songId = this.state.songId;
+	      this.props.addSongToPlaylist(playlistId, songId);
+	
+	      if (!this.props.selectedPlaylist) {
+	        if (this.props.selectedPlaylist.errorSelectedPlaylist) {
+	          this.setState({ error: true });
+	        }
+	      }
+	      // tryAdding()
+	      //   .catch(err => {
+	      //     this.setState({ error: true });
+	      //   });
 	    }
 	  }, {
 	    key: 'render',
@@ -32029,7 +32212,7 @@
 	exports.default = AddSongContainer;
 
 /***/ },
-/* 314 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32123,7 +32306,7 @@
 	exports.default = AddSong;
 
 /***/ },
-/* 315 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32142,11 +32325,11 @@
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _Lyrics = __webpack_require__(316);
+	var _Lyrics = __webpack_require__(320);
 	
 	var _Lyrics2 = _interopRequireDefault(_Lyrics);
 	
-	var _lyrics = __webpack_require__(317);
+	var _lyrics = __webpack_require__(321);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32228,7 +32411,7 @@
 	exports.default = LyricsContainer;
 
 /***/ },
-/* 316 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32289,7 +32472,7 @@
 	exports.default = Lyrics;
 
 /***/ },
-/* 317 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32326,7 +32509,7 @@
 	};
 
 /***/ },
-/* 318 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32337,18 +32520,74 @@
 	
 	var _constants = __webpack_require__(287);
 	
-	exports.default = albumReducer = function albumReducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	  var action = arguments[1];
+	var _utils = __webpack_require__(304);
 	
+	var _axios = __webpack_require__(234);
 	
-	  switch (action.type) {
-	    case _constants.RECEIVE_ALBUM:
-	      return Object.assign({}, state, { album: action.album });
-	    default:
-	      return state;
-	  }
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var setAlbums = function setAlbums(albums) {
+	
+	  return {
+	    type: _constants.RECEIVE_ALBUMS,
+	    albums: albums
+	  };
 	};
+	
+	var fetchAlbums = function fetchAlbums() {
+	
+	  return function (dispatch, getState) {
+	    _axios2.default.get('/api/albums/').then(function (response) {
+	      return response.data;
+	    }).then(function (albums) {
+	      return (0, _utils.convertAlbums)(albums);
+	    }).then(function (convertedAlbums) {
+	      dispatch(setAlbums(convertedAlbums));
+	    });
+	  };
+	};
+	
+	exports.default = fetchAlbums;
+
+/***/ },
+/* 323 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _constants = __webpack_require__(287);
+	
+	var _axios = __webpack_require__(234);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var setArtists = function setArtists(artists) {
+	  return {
+	    type: _constants.RECEIVE_ARTISTS,
+	    artists: artists
+	  };
+	};
+	
+	var fetchArtists = function fetchArtists() {
+	  return function (dispatch) {
+	    _axios2.default.get('/api/artists/').then(function (response) {
+	      return response.data;
+	    }).then(function (artists) {
+	
+	      dispatch(setArtists(artists));
+	    });
+	  };
+	};
+	
+	exports.default = fetchArtists;
 
 /***/ }
 /******/ ]);

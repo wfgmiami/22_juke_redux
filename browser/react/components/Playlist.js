@@ -14,13 +14,14 @@ class Playlist extends React.Component {
     const nextPlaylistId = nextProps.routeParams.playlistId;
     const currentPlaylistId = this.props.routeParams.playlistId;
     const selectPlaylist = this.props.selectPlaylist;
+
     if (nextPlaylistId !== currentPlaylistId)
       selectPlaylist(nextPlaylistId);
   }
 
   render () {
-
-    const playlist = this.props.selectedPlaylist;
+    //  console.log('....playlist props', this.props)
+    const playlist = this.props.selectedPlaylist.selectedPlaylist ? this.props.selectedPlaylist.selectedPlaylist : this.props.selectedPlaylist;
 
     return (
       <div>
